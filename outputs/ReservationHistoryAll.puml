@@ -1,0 +1,30 @@
+@startuml
+!theme plain
+
+actor Client as client
+participant "ReservationHistoryController\n(Controller)" as controller
+participant "ReservationHistoryService\n(Service)" as service
+participant "ReservationHistoryRepository\n(Repository)" as repository
+database "Database" as db
+
+== 예약 이력 현황 조회 ==
+client -> controller : searchReservationsByAll 호출 (예약 이력 현황)
+controller -> service : searchReservationsByAll 호출 (예약 이력 현황)
+service -> repository : findById 호출 (매장-수업 조회)
+repository -> db : 매장-수업 조회
+db -> repository : 결과 응답
+alt 매장-수업 존재하지 않음
+    repository -> service : Optional.empty()
+    service -> controller : 반환 (예외 응답: 매장-수업 존재하지 않음)
+    controller -> client : 반환 (예외 응답: 매장-수업 존재하지 않음)
+else 매장-수업 존재
+    repository -> service : Optional<StoreCourse>
+    service -> repository : findDistinctByOrderByReservationDateDesc 호출 (예약 상태: RESERVE, CANCEL)
+    repository -> db : 예약 이력 현황 조회
+    db -> repository : 결과 응답
+    repository -> service : Page<Reservation>
+    service -> controller : ReservationHistoryResponse
+    controller -> client : 반환 (성공 응답)
+end
+
+@enduml

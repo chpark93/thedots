@@ -1,0 +1,35 @@
+@startuml
+!theme plain
+
+actor Client as client
+participant "ReservationController\n(Controller)" as controller
+participant "ReservationService\n(Service)" as service
+participant "ReservationRepository\n(Repository)" as repository
+database "Database" as db
+
+== 예약 생성 ==
+client -> controller : createReservation 호출 (예약)
+controller -> service : createReservation 호출 (예약)
+alt 유효성 검사 실패
+    service -> controller : 반환 (예외 응답: 유효성 검사 실패)
+    controller -> client : 반환 (예외 응답: 유효성 검사 실패)
+else 유효성 검사 성공
+    service -> repository : existsByUserIdAndStoreCourseIdAndReservationStatus 호출 (중복 예약 체크)
+    repository -> db : 중복 예약 확인
+    db -> repository : 중복 예약 존재 여부
+    alt 중복 예약 존재
+        repository -> service : true (중복 예약 있음)
+        service -> controller : 반환 (예외 응답: 중복 예약 존재)
+        controller -> client : 반환 (예외 응답: 중복 예약 존재)
+    else 중복 예약 없음
+        repository -> service : false (중복 예약 없음)
+        service -> repository : save 호출 (예약 정보 저장)
+        repository -> db : 예약 정보 저장
+        db -> repository : 결과 응답
+        repository -> service : ID (생성된 Reservation 고유 ID)
+        service -> controller : ReservationResponse (성공 응답)
+        controller -> client : 반환 (성공 응답)
+    end
+end
+
+@enduml

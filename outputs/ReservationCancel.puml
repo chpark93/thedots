@@ -1,0 +1,40 @@
+@startuml
+!theme plain
+
+actor Client as client
+participant "ReservationController\n(Controller)" as controller
+participant "ReservationService\n(Service)" as service
+participant "ReservationRepository\n(Repository)" as repository
+database "Database" as db
+
+== 예약 취소 ==
+client -> controller : cancelReservation 호출 (예약 취소)
+controller -> service : cancelReservation 호출 (예약 취소)
+alt 유효성 검사 실패
+    service -> controller : 반환 (예외 응답: 유효성 검사 실패)
+    controller -> client : 반환 (예외 응답: 유효성 검사 실패)
+else 유효성 검사 성공
+    service -> repository : findByUserIdAndIdAndReservationStatus 호출 (예약 정보 조회)
+    repository -> db : 예약 정보 조회
+    db -> repository : 예약 정보 조회 결과
+    alt 예약 정보 존재
+        repository -> service : Reservation 객체
+        alt 당일 또는 예약 날짜가 지난 경우
+            service -> controller : 반환 (예외 응답: 예약 취소 불가)
+            controller -> client : 반환 (예외 응답: 예약 취소 불가)
+        else 예약 취소 가능
+            service -> repository : 예약 정보 업데이트 (예약 상태 : RESERVED -> CANCEL)
+            repository -> db : 예약 정보 업데이트
+            db -> repository : 결과 응답
+            repository -> service : 결과 응답
+            service -> controller : ReservationResponse (성공 응답)
+            controller -> client : 반환 (성공 응답)
+        end
+    else 예약 정보 없음
+        repository -> service : Optional.empty()
+        service -> controller : 반환 (예외 응답: 예약 정보 없음)
+        controller -> client : 반환 (예외 응답: 예약 정보 없음)
+    end
+end
+
+@enduml

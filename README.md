@@ -201,7 +201,3 @@ alter table if exists store_courses
 - ##### Gradle
 
 ***
-
-##### _커넥팅더닷츠 Backend 개발부문 지원자 - 박창희_
-
-***

@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Reservation History API",
-        description = "째깍섬 예약 현황 API")
+        description = "예약 현황 API")
 @Slf4j
 @RestController
 @RequestMapping("/reservations")

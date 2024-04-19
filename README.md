@@ -1,4 +1,4 @@
-# 째깍섬 예약 API
+# 어린이 수업 예약 API
 
 <br/>
 
@@ -22,33 +22,9 @@
 
 ***
 
-## 참고 사항
-
-1. 예약 상황에서 동시성 문제를 해결하기 위한 방법으로 Distribute Lock을 사용해 AOP로 구현했습니다.
-<br/> 프로젝트 정상 작동을 위해 Redis(https://redis.io/download/) 다운로드 및 redis-server 실행이 필요합니다.
-<br/> 포트는 기본 포트인 (port : 6379) 입니다.
-
-
-2. ERD와 Sequence Diagram 산출물 파일은 프로젝트 /outputs 경로에 있습니다. 
-
-
-***
-
 ## API 문서
 
-### [째깍섬 예약 API - Swagger 이동(http://localhost:8080/thedots/swagger.html)](http://localhost:8080/thedots/swagger.html)
-
-***
-
-<br/><br/><br/><br/>
-
-## ERD
-
-<br/>
-
-![캡처](./outputs/images/erd.png)
-
-<br/>
+### [예약 API - Swagger 이동(http://localhost:8080/thedots/swagger.html)](http://localhost:8080/thedots/swagger.html)
 
 ***
 
@@ -199,9 +175,5 @@ alter table if exists store_courses
 - ##### Spring Boot 3.2.2 
 - ##### Swagger 
 - ##### Gradle
-
-***
-
-##### _커넥팅더닷츠 Backend 개발부문 지원자 - 박창희_
 
 ***

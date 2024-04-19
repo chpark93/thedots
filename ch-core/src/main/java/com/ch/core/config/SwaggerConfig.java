@@ -21,8 +21,8 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         Info info = new Info()
                 .version("v1.0.0")
-                .title("째깍섬 예약 API")
-                .description("째깍섬 예약 및 현황 조회 API");
+                .title("예약 API")
+                .description("예약 및 현황 조회 API");
 
         return new OpenAPI()
                 .info(info)

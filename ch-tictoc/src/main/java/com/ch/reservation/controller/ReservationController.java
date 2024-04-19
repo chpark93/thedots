@@ -19,7 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Reservation API", description = "째깍섬 예약 API")
+@Tag(name = "Reservation API", description = "예약 API")
 @Slf4j
 @RestController
 @RequestMapping("/reservations")
